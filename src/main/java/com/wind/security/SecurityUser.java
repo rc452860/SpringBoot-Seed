@@ -1,61 +1,46 @@
 package com.wind.security;
 
 import com.wind.mybatis.pojo.User;
+import lombok.*;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-
-import static java.time.Instant.now;
+import java.util.*;
 
 
+@Getter
+@ToString
 public class SecurityUser extends User implements UserDetails{
 
-    public SecurityUser(User user){
-        setName(user.getName());
-        setPassword(user.getPassword());
-        setEmail(user.getEmail());
-        setExpiredate(user.getExpiredate());
-        setId(user.getId());
-        setLastlogindate(user.getLastlogindate());
-        setLastloginip(user.getLastloginip());
-        setPhone(user.getPhone());
-        setRegisterdate(user.getRegisterdate());
-        setRole(user.getRole());
+    private final String username;
+    private final boolean enabled;
+    private final boolean accountNonExpired;
+    private final boolean credentialsNonExpired;
+    private final boolean accountNonLocked;
+    private final Set<GrantedAuthority> authorities;
+
+    public SecurityUser(User user, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+        if (user != null) {
+            username = user.getName();
+            setPassword(user.getPassword());
+            setEmail(user.getEmail());
+            setExpiredate(user.getExpiredate());
+            setId(user.getId());
+            setLastlogindate(user.getLastlogindate());
+            setLastloginip(user.getLastloginip());
+            setPhone(user.getPhone());
+            setRegisterdate(user.getRegisterdate());
+            setRole(user.getRole());
+            setPassword(user.getPassword());
+            this.enabled = enabled;
+            this.accountNonExpired = accountNonExpired;
+            this.credentialsNonExpired = credentialsNonExpired;
+            this.accountNonLocked = accountNonLocked;
+            this.authorities = Collections.unmodifiableSet(new HashSet<>(CollectionUtils.emptyIfNull(authorities)));
+        } else {
+            throw new IllegalArgumentException("Cannot pass null or empty values to constructor");
+        }
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return getName();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return getExpiredate().toInstant().isAfter(now());
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return getExpiredate().toInstant().isAfter(now());
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return getExpiredate().toInstant().isAfter(now());
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return getExpiredate().toInstant().isAfter(now());
-    }
 }

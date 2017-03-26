@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
         User user = new User();
         user.setName(userName);
         user = userMapper.selectOne(user);
-        return new SecurityUser(user);
+        return new SecurityUser(user, true, true, true, true, null);
     }
 
     public Optional<User> getUserByID(Long id) {
