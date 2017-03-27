@@ -1,7 +1,6 @@
-package com.wind.security;
+package com.wind.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.wind.config.DruidAutoConfiguration;
 import com.wind.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.*;
@@ -15,18 +14,39 @@ import org.springframework.security.oauth2.provider.client.JdbcClientDetailsServ
 import org.springframework.security.oauth2.provider.token.*;
 import org.springframework.security.oauth2.provider.token.store.*;
 
-import java.util.concurrent.TimeUnit;
+import javax.sql.DataSource;
+import java.sql.SQLException;
 
 @Configuration
-@EnableAuthorizationServer
-@AutoConfigureAfter(DruidAutoConfiguration.class)
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+@AutoConfigureAfter(DruidAutoConfig.class)
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+
+    @Autowired
+    private DruidProperties properties;
+
+    private DruidDataSource dataSource;
+
+    @Bean
+    public DataSource dataSource() {
+        dataSource = new DruidDataSource();
+        dataSource.setUrl(properties.getUrl());
+        dataSource.setUsername(properties.getUsername());
+        dataSource.setPassword(properties.getPassword());
+        dataSource.setInitialSize(properties.getInitialSize());
+        dataSource.setMinIdle(properties.getMinIdle());
+        dataSource.setMaxActive(properties.getMaxActive());
+        dataSource.setTestOnBorrow(properties.isTestOnBorrow());
+        try {
+            dataSource.setFilters(properties.getFilters());
+            dataSource.init();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return dataSource;
+    }
 
     @Autowired
     private TokenStore tokenStore;
-
-    @Autowired
-    private DruidDataSource dataSource;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -40,21 +60,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         /*clients
                 .inMemory()
                 .withClient("client")
-                .secret("security")
                 .authorizedGrantTypes("password", "refresh_token")
-                .scopes("read", "write");*/
+                .scopes("app")
+                .secret("security");*/
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        // 配置TokenServices参数
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(endpoints.getTokenStore());
-        tokenServices.setSupportRefreshToken(false);
-        tokenServices.setClientDetailsService(endpoints.getClientDetailsService());
-        tokenServices.setTokenEnhancer(endpoints.getTokenEnhancer());
-        tokenServices.setAccessTokenValiditySeconds( (int) TimeUnit.DAYS.toSeconds(30)); // 30天
-        endpoints.tokenServices(tokenServices);
         endpoints
                 .tokenStore(tokenStore)
                 .authenticationManager(authenticationManager)
@@ -63,11 +75,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Bean
     public TokenStore tokenStore() {
+        if (dataSource == null) dataSource();
         return new JdbcTokenStore(dataSource);
     }
 
     @Bean
     public ClientDetailsService clientDetails() {
+        if (dataSource == null) dataSource();
         return new JdbcClientDetailsService(dataSource);
     }
 
@@ -75,9 +89,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Primary
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setSupportRefreshToken(true); // support refresh token
-        tokenServices.setTokenStore(tokenStore); // use in-memory token store
+        tokenServices.setSupportRefreshToken(true);
+        tokenServices.setTokenStore(tokenStore);
         return tokenServices;
     }
-
 }

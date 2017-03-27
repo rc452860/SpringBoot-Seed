@@ -12,5 +12,4 @@ public class SeedApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }

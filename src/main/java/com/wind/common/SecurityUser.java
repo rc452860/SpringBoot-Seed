@@ -1,4 +1,4 @@
-package com.wind.security;
+package com.wind.common;
 
 import com.wind.mybatis.pojo.User;
 import lombok.*;

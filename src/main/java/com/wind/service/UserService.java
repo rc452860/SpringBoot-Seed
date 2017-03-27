@@ -4,17 +4,14 @@ import com.github.pagehelper.PageHelper;
 import com.wind.common.Constant;
 import com.wind.mybatis.mapper.UserMapper;
 import com.wind.mybatis.pojo.User;
-import com.wind.security.SecurityUser;
+import com.wind.common.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

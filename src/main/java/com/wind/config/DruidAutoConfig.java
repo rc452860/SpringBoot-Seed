@@ -4,7 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -15,38 +15,12 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
-
 @Configuration
-@EnableAutoConfiguration
 @EnableConfigurationProperties(DruidProperties.class)
-@ConditionalOnClass(DruidDataSource.class)
-@ConditionalOnProperty(prefix = "druid", name = "url")
-@AutoConfigureBefore(DataSourceAutoConfiguration.class)
-public class DruidAutoConfiguration {
+public class DruidAutoConfig {
 
     @Autowired
     private DruidProperties properties;
-
-    @Bean
-    public DataSource dataSource() {
-        DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setUrl(properties.getUrl());
-        dataSource.setUsername(properties.getUsername());
-        dataSource.setPassword(properties.getPassword());
-        dataSource.setInitialSize(properties.getInitialSize());
-        dataSource.setMinIdle(properties.getMinIdle());
-        dataSource.setMaxActive(properties.getMaxActive());
-        dataSource.setTestOnBorrow(properties.isTestOnBorrow());
-        try {
-            dataSource.setFilters(properties.getFilters());
-            dataSource.init();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return dataSource;
-    }
 
     @Bean
     public ServletRegistrationBean DruidStatViewServle2() {

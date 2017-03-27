@@ -1,4 +1,4 @@
-package com.wind.security;
+package com.wind.config;
 
 import com.wind.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 
 @Configuration
-public class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+public class GlobalAuthenticationConfig extends GlobalAuthenticationConfigurerAdapter {
 
     @Autowired
     private UserService userService;

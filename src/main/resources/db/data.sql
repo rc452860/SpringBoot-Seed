@@ -17,4 +17,9 @@ INSERT INTO `user` VALUES ('13', 'user11', 'user', '2017-03-26 20:01:33', '2017-
 INSERT INTO `user` VALUES ('14', 'user12', 'user', '2017-03-26 20:01:33', '2017-03-26 20:01:35', '2017-03-31 20:01:38', 'user', '', '', '0.0.0.0');
 INSERT INTO `user` VALUES ('15', 'user13', 'user', '2017-03-26 20:01:33', '2017-03-26 20:01:35', '2017-03-31 20:01:38', 'user', '', '', '0.0.0.0');
 INSERT INTO `user` VALUES ('16', 'user14', 'user', '2017-03-26 20:01:33', '2017-03-26 20:01:35', '2017-03-31 20:01:38', 'user', '', '', '0.0.0.0');
+
+-- ----------------------------
+--  Records of `oauth_client_details`
+-- ----------------------------
+INSERT INTO `oauth_client_details` VALUES ('client', null, 'security', 'app', 'password', null, null, null, null, null, null);
 COMMIT;
