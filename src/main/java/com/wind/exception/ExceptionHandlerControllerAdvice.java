@@ -55,7 +55,6 @@ class ExceptionHandlerControllerAdvice {
                         .setMessage("The server met an unexpected error. Please contact administrators."));
     }
 
-    /********************************** HELPER METHOD **********************************/
     private void logError(HttpServletRequest request, Exception e) {
         log.error("[URI: " + request.getRequestURI() + "]"
                 + "[error: " + e.getMessage() + "]");

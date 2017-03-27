@@ -5,6 +5,7 @@ import com.wind.common.PaginatedResult;
 import com.wind.exception.ResourceNotFoundException;
 import com.wind.mybatis.pojo.User;
 import com.wind.service.UserService;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @ApiOperation(value="获取用户详情")
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         return userService
@@ -31,6 +33,7 @@ public class UserController {
                         .setId(id));
     }
 
+    @ApiOperation(value="获取用户列表")
     @GetMapping("/all/{page}")
     public ResponseEntity<?> getAllUser(@PathVariable int page) {
         return ResponseEntity
@@ -40,6 +43,7 @@ public class UserController {
                         .setTotalPage(userService.getTotalPage()));
     }
 
+    @ApiOperation(value="新增用户")
     @PostMapping
     public ResponseEntity<?> postUser(@RequestBody User user) {
         userService.addUser(user);
@@ -55,6 +59,7 @@ public class UserController {
                 .body(user);
     }
 
+    @ApiOperation(value="修改用户")
     @PutMapping("/{id}")
     public ResponseEntity<?> putUser(@PathVariable Long id, @RequestBody User user) {
         assertUserExist(id);
@@ -67,6 +72,7 @@ public class UserController {
                 .body(user);
     }
 
+    @ApiOperation(value="删除用户")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         assertUserExist(id);
@@ -78,7 +84,6 @@ public class UserController {
                 .build();
     }
 
-    /********************************** HELPER METHOD **********************************/
     private void assertUserExist(Long id) {
         userService
                 .getUserByID(id)
