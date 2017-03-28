@@ -27,3 +27,7 @@
 >use `curl http://localhost:8080/oauth/token -X POST -u client:security -d "grant_type=password&username=admin&password=admin"` to get access token
 
 > use `curl http://localhost:8080/user/1 -X DELETE -H "Authorization: Bearer {access token}"` to access authenticated url
+
+#### remote service
+
+> `https://github.com/ustcwudi/SpringBoot-Seed-Service`
