@@ -5,6 +5,7 @@
 > An example project based on SpringBoot integrated with oauth2 ( token persisted on mysql ), swagger2, restful API, druid, mybatis ( generator and pagehelper included).
 
 ## Preparation
+> install plugin `lombok` if you are using IDEA
 
 > Create mysql database named `seed` by `db/schema.sql` & `db/data.sql`, then Run SpringBoot Application
 
