@@ -12,7 +12,7 @@ import java.util.*;
 
 @Getter
 @ToString
-public class SecurityUser extends User implements UserDetails{
+public class SecurityUser extends User implements UserDetails {
 
     private final String username;
     private final boolean enabled;
@@ -38,8 +38,8 @@ public class SecurityUser extends User implements UserDetails{
             this.accountNonExpired = accountNonExpired;
             this.credentialsNonExpired = credentialsNonExpired;
             this.accountNonLocked = accountNonLocked;
-            this.authorities = Collections.unmodifiableSet(new HashSet<>(CollectionUtils.emptyIfNull(authorities)));
-            //this.authorities.add(new SimpleGrantedAuthority(user.getRole()));
+            this.authorities = new HashSet<>(CollectionUtils.emptyIfNull(authorities));
+            this.authorities.add(new SimpleGrantedAuthority(user.getRole()));
 
         } else {
             throw new IllegalArgumentException("Cannot pass null or empty values to constructor");
