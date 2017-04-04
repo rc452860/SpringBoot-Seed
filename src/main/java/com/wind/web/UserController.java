@@ -34,8 +34,8 @@ public class UserController {
     }
 
     @ApiOperation(value="获取用户列表")
-    @GetMapping("/all/{page}")
-    public ResponseEntity<?> getAllUser(@PathVariable int page) {
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUser(@RequestParam int page) {
         return ResponseEntity
                 .ok(new PaginatedResult()
                         .setData(userService.getAll(page))
